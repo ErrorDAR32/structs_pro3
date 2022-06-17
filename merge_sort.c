@@ -1,3 +1,10 @@
+//merge sort implementation
+//parametric comparisons
+//generic
+//in place merge
+//stable?
+
+
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -10,6 +17,7 @@ void swap(void* a, void* b, void* temp, int data_size) {
         memcpy(b, temp, data_size);
 }
 
+
 void insert(void *array, int start, int end, int (*compare)(void *, void *), int data_size) {
     int i = start;
     void* temp = malloc(data_size);
@@ -21,66 +29,20 @@ void insert(void *array, int start, int end, int (*compare)(void *, void *), int
 
 
 void merge(void *arr, int start, int mid, int end, int (*compare)(void *, void *), int data_size) {
-    int l, w, r;
-
+    int l, r;
     l = start;
-    w = mid;
     r = mid;
 
     void *tmp = malloc(data_size);
-    while (l < r) {
-        if (r>=end) {
-            r=w;
-        }
-        if (l==w) {
-            w = r;
-        }
-        if (w==r) {
-            if (compare(arr+l*data_size, arr+r*data_size) < 0) {
-                l++;
-                continue;
-            }
 
-            //swap(l, r);
-            swap(arr+l*data_size, arr+r*data_size, tmp, data_size);
-            r++;
-            l++;
-            continue;
-        }
-
-        if (compare(arr+l*data_size, arr+r*data_size) < 0) {
-            //l<r
-            if (compare(arr+l*data_size, arr+w*data_size) < 0) {
-                //l<w && l<r
-                // do nothing
-                l++;
-                continue;
-            } else {
-                //w<l<r
-                //swap(l, w);
-                swap(arr+l*data_size, arr+w*data_size, tmp, data_size);
-                l++;
-                insert(arr, w, r, compare, data_size); 
-                continue;
-            }
-        } else {
+    while (l < r && r < end) {
+        if (compare(arr+r*data_size, arr+l*data_size) < 0) {
             //r<l
-            if (compare(arr+r*data_size, arr+w*data_size) < 0) {
-                //r<w && r<l
-                //swap(l, r);
-                swap(arr+l*data_size, arr+r*data_size, tmp, data_size);
-                l++;
-                insert(arr, r, end, compare, data_size);
-                continue;
-            } else {
-                //w<r<l
-                //swap(l, w);
-                swap(arr+l*data_size, arr+w*data_size, tmp, data_size);
-                l++;
-                insert(arr, w, r, compare, data_size);
-                continue;
-            }
+            swap(arr+l*data_size, arr+r*data_size, tmp, data_size);
+
+            insert(arr, r, end, compare, data_size);
         }
+        l++;
     }
 }
 
@@ -88,6 +50,7 @@ void merge(void *arr, int start, int mid, int end, int (*compare)(void *, void *
 void merge_sort(void *arr, int size, int (*compare)(void *, void *), int data_size) {
     typedef struct range {int first; int end; bool to_merge; } range;
     
+    //todo: make stack dynami
     int stack_capacity = 20;
     int stack_size = 0;
     range *stack = malloc(sizeof(range) * 40);
@@ -96,6 +59,7 @@ void merge_sort(void *arr, int size, int (*compare)(void *, void *), int data_si
     stack_size = 1;
 
     while (stack_size > 0) {
+        
         range *r = &stack[stack_size-1];
         stack_size--;
         int mid = (r->first + r->end)/2;
@@ -139,11 +103,18 @@ int compare_ints(void *a, void *b) {
     }
 }
 
+
 void test() {
-    int arr[] = {1,5,2,9,7,3,6,4,8,0};
-    merge_sort(arr, 10, compare_ints, sizeof(int));
-    for (int i = 0; i < 10; i++) {
+    int arr[] = {1,5,2,9,7,3,6,4,8,0,1,2,3,43,4,5,7,8,2,9,23,7,3,6,8,9,3,57,2,78,9,2,7,3};
+    int size = sizeof(arr)/sizeof(int);
+
+    merge_sort(arr, size, compare_ints, sizeof(int));
+    for (int i = 0; i < size; i++) {
         printf("%d ", arr[i]);
     }
     printf("\n");
+}
+
+void main() {
+    test();
 }
