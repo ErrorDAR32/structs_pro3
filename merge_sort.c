@@ -50,7 +50,7 @@ void merge(void *arr, int start, int mid, int end, int (*compare)(void *, void *
 void merge_sort(void *arr, int size, int (*compare)(void *, void *), int data_size) {
     typedef struct range {int first; int end; bool to_merge; } range;
     
-    //todo: make stack dynami
+    //todo: make stack dynamic
     int stack_capacity = 20;
     int stack_size = 0;
     range *stack = malloc(sizeof(range) * 40);
