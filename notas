@@ -1,0 +1,25 @@
+structure:
+- graph traversing stuff
+- graph components stuff
+- parsing of file
+- menu
+- main
+
+
+about when to use bike or car:
+interpreting the docs i came to the conclusion that
+the relation between bike's effort and car's emissions per effort
+is the determining factor for choosing a transport medium
+
+since the relation between car's effort and emmissions per kilometer
+is the same the car's emissions per effort always resolves to 15,
+that leaves the bikes effort as the only invariant in the relation
+so, when the bike's effort is bigger than 15 (ie 1.5km) it equals the cars
+emissions per effort, a bigger distance will result in choosing the car,
+and a lesser one in chooseing the bike
+
+
+menu:
+1: cargar desde archivo
+2: calcular ruta
+3: salir
