@@ -29,7 +29,6 @@ typedef struct Graph {
 typedef struct Vertex {
     int id;
     void *data;
-    double distance;
     struct Edge *edges; //only includes outbound edges
     int edge_count;
 } Vertex;
@@ -50,48 +49,14 @@ Graph *graph_create(int vertex_count, int edge_count) {
     return graph;
 }
 
-//binary search for vertex by id
-Vertex *graph_get_vertex(Graph *graph, int id) {
-    int start = 0;
-    int end = graph->vertex_count;
+void* binary_search(void *arr, int start, int end, int (*compare)(void *, void *), void* key, int data_size) {
     while (start < end) {
         int mid = (start + end) / 2;
-        if (graph->vertexes[mid].id == id) {
-            return graph->vertexes + mid;
-        } else if (graph->vertexes[mid].id < id) {
-            start = mid + 1;
-        } else {
-            end = mid;
-        }
-    }
-    return NULL;
-}
+        int cmp = compare(arr+mid*data_size, key);
 
-
-int graph_get_vertex_position(Graph *graph, int id) {
-    int start = 0;
-    int end = graph->vertex_count;
-    while (start < end) {
-        int mid = (start + end) / 2;
-        if (graph->vertexes[mid].id == id) {
-            return mid;
-        } else if (graph->vertexes[mid].id < id) {
-            start = mid + 1;
-        } else {
-            end = mid;
-        }
-    }
-    return -1;
-}
-
-Edge *graph_get_edge(Graph *graph, int id) {
-    int start = 0;
-    int end = graph->edge_count;
-    while (start < end) {
-        int mid = (start + end) / 2;
-        if (graph->edges[mid].id == id) {
-            return graph->edges + mid;
-        } else if (graph->edges[mid].id < id) {
+        if (cmp == 0) {
+            return arr + mid * data_size;
+        } else if (cmp == -1) {
             start = mid + 1;
         } else {
             end = mid;
@@ -123,6 +88,39 @@ int compare_edge_id(void *a, void *b) {
         return 0;
     }
 }
+
+Vertex *graph_get_vertex(Graph *graph, int id) {
+    Edge mock = (Edge){    
+        id: id,
+        data: NULL,
+        source: NULL,
+        destination: NULL
+    };
+
+    return binary_search(graph->edges, 0, graph->edge_count, compare_edge_id, &mock, sizeof(Vertex));
+}
+
+
+int graph_get_vertex_position(Graph *graph, int id) {
+    int start = 0;
+    int end = graph->vertex_count;
+    while (start < end) {
+        int mid = (start + end) / 2;
+        if (graph->vertexes[mid].id == id) {
+            return mid;
+        } else if (graph->vertexes[mid].id < id) {
+            start = mid + 1;
+        } else {
+            end = mid;
+        }
+    }
+    return -1;
+}
+
+Edge *graph_get_edge(Graph *graph, int id) {
+
+}
+
 
 int *dijkstra(Graph *graph, int start_id, int end_id, int (get_cost)(Edge*)) {
     int *cost = malloc(graph->vertex_count * sizeof(int));

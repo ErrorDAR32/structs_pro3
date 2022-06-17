@@ -4,13 +4,17 @@
 #include <string.h>
 
 
+void swap(void* a, void* b, void* temp, int data_size) {
+        memcpy(temp, a, data_size);
+        memcpy(a, b, data_size);
+        memcpy(b, temp, data_size);
+}
+
 void insert(void *array, int start, int end, int (*compare)(void *, void *), int data_size) {
     int i = start;
     void* temp = malloc(data_size);
     while (i < (end-1) && compare(array + i * data_size, array + (i + 1) * data_size) > 0) {
-        memcpy(temp, array + i * data_size, data_size);
-        memcpy(array + i * data_size, array + (i + 1) * data_size, data_size);
-        memcpy(array + (i + 1) * data_size, temp, data_size);
+        swap(array+i*data_size, array+(i+1)*data_size, temp, data_size);
         i++;
     }
 }
@@ -38,9 +42,7 @@ void merge(void *arr, int start, int mid, int end, int (*compare)(void *, void *
             }
 
             //swap(l, r);
-            memcpy(tmp, arr+l*data_size, data_size); 
-            memcpy(arr+l*data_size, arr+r*data_size, data_size);
-            memcpy(arr+r*data_size, tmp, data_size);
+            swap(arr+l*data_size, arr+r*data_size, tmp, data_size);
             r++;
             l++;
             continue;
@@ -56,9 +58,7 @@ void merge(void *arr, int start, int mid, int end, int (*compare)(void *, void *
             } else {
                 //w<l<r
                 //swap(l, w);
-                memcpy(tmp, arr+l*data_size, data_size);
-                memcpy(arr+l*data_size, arr+w*data_size, data_size);
-                memcpy(arr+w*data_size, tmp, data_size);
+                swap(arr+l*data_size, arr+w*data_size, tmp, data_size);
                 l++;
                 insert(arr, w, r, compare, data_size); 
                 continue;
@@ -68,18 +68,14 @@ void merge(void *arr, int start, int mid, int end, int (*compare)(void *, void *
             if (compare(arr+r*data_size, arr+w*data_size) < 0) {
                 //r<w && r<l
                 //swap(l, r);
-                memcpy(tmp, arr+l*data_size, data_size);
-                memcpy(arr+l*data_size, arr+r*data_size, data_size);
-                memcpy(arr+r*data_size, tmp, data_size);
+                swap(arr+l*data_size, arr+r*data_size, tmp, data_size);
                 l++;
                 insert(arr, r, end, compare, data_size);
                 continue;
             } else {
                 //w<r<l
                 //swap(l, w);
-                memcpy(tmp, arr+l*data_size, data_size);
-                memcpy(arr+l*data_size, arr+w*data_size, data_size);
-                memcpy(arr+w*data_size, tmp, data_size);
+                swap(arr+l*data_size, arr+w*data_size, tmp, data_size);
                 l++;
                 insert(arr, w, r, compare, data_size);
                 continue;
