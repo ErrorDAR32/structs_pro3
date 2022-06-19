@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <limits.h>
+#include <stdio.h>
+#include "merge_sort.h"
 
 //this directed graph conists of arrays of vertices and edges
 // in which each vertex is an array of edges
@@ -23,6 +25,8 @@ typedef struct Graph {
     struct Vertex *vertexes;
     int vertex_count;
     int edge_count;
+    int edges_capacity;
+    int vertexes_capacity;
 } Graph;
 
 
@@ -128,39 +132,123 @@ Edge *graph_get_edge(Graph *graph, int id) {
 
 }
 
-
+// return array corresponding to raw positions of vertexes in graph arrays
 int *dijkstra(Graph *graph, int start_id, int end_id, int (get_cost)(Edge*)) {
-    int *cost = malloc(graph->vertex_count * sizeof(int));
-    bool *visited = calloc(graph->vertex_count, sizeof(bool));
+    int *distances = malloc(graph->vertex_count * sizeof(int));
+    bool *visited = malloc(graph->vertex_count * sizeof(int));
     int *prev = malloc(graph->vertex_count * sizeof(int));
+    int *queue = malloc(graph->vertex_count * sizeof(int));
+    
+    for (int i = 0; i < graph->vertex_count; i++) {
+        distances[i] = INT_MAX;
+        visited[i] = false;
+        prev[i] = -1;
+    }
 
-    int current = graph_get_vertex_position(graph, start_id);
-    cost[current] = 0;
-    visited[current] = true;
+    distances[graph_get_vertex_position(graph, start_id)] = 0;
+    int queue_start = 0;
+    int queue_end = 0;
+    queue[queue_end++] = start_id;
 
-    while (current != -1) {
-        Vertex *vertex = &graph->vertexes[current];
-        for (int i = 0; i < vertex->edge_count; i++) {
-            int edge = &vertex->edges[i];
-            int cost_to_destination = cost[current] + get_cost(edge);
-            int destination = graph_get_vertex_position(graph, graph_get_edge(graph, edge)->destination->id);
-            if (visited[destination]) {
-                if (cost_to_destination < cost[destination]) {
-                    cost[destination] = cost_to_destination;
-                }
-            } else {
-                cost[destination] = cost_to_destination;
-                visited[destination] = true;
-            }
-        }
+    while (queue_start < queue_end) {
+        int current = queue[queue_start++];
         visited[current] = true;
-        current = -1;
-        int min = INT_MAX;
-        for (int i = 0; i < graph->vertex_count; i++) {
-            if (!visited[i] && cost[i] < min) {
-                min = cost[i];
-                current = i;
+        Vertex *current_vertex = graph_get_vertex(graph, current);
+
+        for (int i = 0; i < current_vertex->edge_count; i++) {
+            Edge *edge = graph_get_edge(graph, current_vertex->edges[i]);
+            int cost = get_cost(edge);
+            int next = edge->destination[0];
+            if (distances[next] > distances[current] + cost) {
+                distances[next] = distances[current] + cost;
+                prev[next] = current;
+                if (!visited[next]) {
+                    queue[queue_end++] = next;
+                }
             }
         }
+    }
+
+    free(queue);
+    free(visited);
+    free(distances);
+
+    return prev;
+
+}
+
+int distance(Edge *edge) {
+    return (int) edge->data;
+}
+
+
+Vertex new_Vertex(int id, void *data) {
+    Vertex v;
+    v.id = id;
+    v.data = data;
+    return v;
+}
+
+Edge new_edge(int source, int destination, void *data) {
+    Edge e;
+    e.source = source;
+    e.destination = destination;
+    e.data = data;
+    return e;
+}
+
+Vertex *graph_add_vertex(Graph *graph, int id, void *data) {
+    if (graph->vertex_count == graph->vertexes_capacity) {
+        graph->vertexes_capacity *= 2;
+        graph->vertexes = realloc(graph->vertexes, graph->vertexes_capacity * sizeof(Vertex));
+    }
+    Vertex v = new_Vertex(id, data);
+    graph->vertexes[graph->vertex_count] = v;
+    graph->vertex_count++;
+
+    merge_sort(graph->vertexes, graph->vertex_count, sizeof(Vertex), compare_vertex_id);
+
+    return &graph->vertexes[graph->vertex_count - 1];
+}
+
+
+
+void main() {
+    //create testing graph
+    Vertex *vertexes = malloc(sizeof(Vertex) * 5);
+    vertexes[0] = new_Vertex(0, "A");
+    vertexes[1] = new_Vertex(1, "B");
+    vertexes[2] = new_Vertex(2, "C");
+    vertexes[3] = new_Vertex(3, "D");
+    vertexes[4] = new_Vertex(4, "E");
+
+    Edge *edges = malloc(sizeof(Edge) * 10);
+
+    for (int i = 0; i < 5; i++) {
+        int * m = malloc(sizeof(int));
+        m = i;
+        edges[i] = new_edge(i, i + 1, m);
+    }
+
+
+
+    Graph *graph = malloc(sizeof(Graph));
+    graph->vertexes = vertexes;
+    graph->vertex_count = 5;
+    graph->vertexes_capacity = 5;
+    graph->edges = edges;
+    graph->edge_count = 10;
+    graph->edges_capacity = 10;
+
+    // test dijkstra
+    int *costs = dijkstra(graph, 0, 4, distance);
+
+    for (int i = 0; i < graph->vertex_count; i++) {
+        printf("%d\n", vertexes[i]);
+    }
+
+
+    for (int i = 0; i < graph->vertex_count; i++) {
+        printf("%d\n", costs[i]);
     }
 }

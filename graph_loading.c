@@ -115,7 +115,8 @@ Edge *load_edges(token *tokens, int len, Vertex *vertexes, int vertexes_size) {
 
             e.source = vertexes[c1].id;
             e.destination = vertexes[c2].id;
-            e.data = memcpy(malloc(malloc(tokens[i].len + 1)), tokens[i].str, tokens[i].len);
+            e.data = malloc(sizeof(int));
+            e.data = atoi(tokens[i].str);
             edges[edges_size] = e;
             
             detected = 0;
