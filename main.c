@@ -2,7 +2,10 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
-#include "load_data.c"
+#include "load_data.c" 
+#include "graph.c"
+
+
 //#include "graph_loading.c"
 /**
   * Instituto Tecnologico de Costa Rica
@@ -24,8 +27,24 @@ void loadingData(linkedList * l){
 }
 
 //It selects the shortest way between points A & B
-void selectTrip(void* A, void* B){
+void selectTrip(void* A, void* B, linkedList * l){
     printf("\n*******************************************************\n");
+    void* resultOfDijkstra;
+    vehicle * car=search(l, "carro");
+    vehicle * bike=search(l, "bicicleta");
+
+    //using the dijkstra's algorithm, obtains the recommended distance between a & b
+    //the result will be added on the variable "resultOfDijkstra"
+    //then, this:
+    /*
+    if( (car->co2Emission * resultOfDijkstra) > (bike->effort * 2) ){
+        printf("La distancia entre %s y %s es %d. \n Se recomienda viajar en %s", A,B,resultOfDijkstra, bike->name);  
+        return;
+    }else{
+        printf("La distancia entre %s y %s es %d. \n Se recomienda viajar en %s", A,B,resultOfDijkstra, car->name);  
+        return;
+    }
+    */
     printf("\nNot Implemented yet\n");
 }
 //It prints the graph on screen
@@ -66,7 +85,7 @@ void menu(linkedList* l){
         
         scanf("%s", &a);
         
-        selectTrip(a,b);
+        selectTrip(a,b, l);
         break;
     case 2:
         printf("\n");
