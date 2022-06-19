@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "load_data.c" 
-#include "graph.c"
+#include "graph.h"
 
 
 //#include "graph_loading.c"

@@ -273,65 +273,65 @@ Graph new_graph() {
 
 
 
-void main() {
-    //create testing graph
-    Graph graph = new_graph();
-
-    char *data = malloc(sizeof(char) * 10);
-    *data = 'A';
-    graph_add_vertex(&graph, 0, data);
-
-    data = malloc(sizeof(char) * 10);
-    *data = 'B';
-    graph_add_vertex(&graph, 1, data);
-    
-    data = malloc(sizeof(char) * 10);
-    *data = 'C';
-    graph_add_vertex(&graph, 2, data);
-    
-    data = malloc(sizeof(char) * 10);
-    *data = 'D';
-    graph_add_vertex(&graph, 3, data);
-    
-    data = malloc(sizeof(char) * 10);
-    *data = 'E';
-    graph_add_vertex(&graph, 4, data);
-
-
-    data = malloc(sizeof(int));
-    *data = 1;
-    graph_add_edge(&graph, 0, 0, 1, data);
-    data = malloc(sizeof(int));
-    *data = 2;
-    graph_add_edge(&graph, 1, 0, 2, data);
-    data = malloc(sizeof(int));
-    *data = 3;
-    graph_add_edge(&graph, 2, 1, 3, data);
-    data = malloc(sizeof(int));
-    *data = 4;
-    graph_add_edge(&graph, 3, 2, 4, data);
-    data = malloc(sizeof(int));
-    *data = 5;
-    graph_add_edge(&graph, 4, 3, 0, data);
-
-    //print graph vertexes
-    for (int i = 0; i < graph.vertex_count; i++) {
-        printf("v: %d %c, \n", graph.vertexes[i].id, *(char*)graph.vertexes[i].data);
-
-        //print vertex edges
-        for (int j = 0; j < graph.vertexes[i].edge_count; j++) {
-            printf("    %d\n", graph.vertexes[i].edges[j]);
-            
-            Edge *edge = graph_get_edge(&graph, graph.vertexes[i].edges[j]);
-            printf("    e: %d %d\n", edge->source, edge->destination );
-        }
-    }
-
-    printf("pre dijkstra\n");
-    // test dijkstra
-    int *routes = dijkstra(&graph, 0, distance);
-
-    for (int i = 0; i < graph.vertex_count; i++) {
-        printf("%d\n", routes[i]);
-    }
-}
+//void main() {
+//    //create testing graph
+//    Graph graph = new_graph();
+//
+//    char *data = malloc(sizeof(char) * 10);
+//    *data = 'A';
+//    graph_add_vertex(&graph, 0, data);
+//
+//    data = malloc(sizeof(char) * 10);
+//    *data = 'B';
+//    graph_add_vertex(&graph, 1, data);
+//    
+//    data = malloc(sizeof(char) * 10);
+//    *data = 'C';
+//    graph_add_vertex(&graph, 2, data);
+//    
+//    data = malloc(sizeof(char) * 10);
+//    *data = 'D';
+//    graph_add_vertex(&graph, 3, data);
+//    
+//    data = malloc(sizeof(char) * 10);
+//    *data = 'E';
+//    graph_add_vertex(&graph, 4, data);
+//
+//
+//    data = malloc(sizeof(int));
+//    *data = 1;
+//    graph_add_edge(&graph, 0, 0, 1, data);
+//    data = malloc(sizeof(int));
+//    *data = 2;
+//    graph_add_edge(&graph, 1, 0, 2, data);
+//    data = malloc(sizeof(int));
+//    *data = 3;
+//    graph_add_edge(&graph, 2, 1, 3, data);
+//    data = malloc(sizeof(int));
+//    *data = 4;
+//    graph_add_edge(&graph, 3, 2, 4, data);
+//    data = malloc(sizeof(int));
+//    *data = 5;
+//    graph_add_edge(&graph, 4, 3, 0, data);
+//
+//    //print graph vertexes
+//    for (int i = 0; i < graph.vertex_count; i++) {
+//        printf("v: %d %c, \n", graph.vertexes[i].id, *(char*)graph.vertexes[i].data);
+//
+//        //print vertex edges
+//        for (int j = 0; j < graph.vertexes[i].edge_count; j++) {
+//            printf("    %d\n", graph.vertexes[i].edges[j]);
+//            
+//            Edge *edge = graph_get_edge(&graph, graph.vertexes[i].edges[j]);
+//            printf("    e: %d %d\n", edge->source, edge->destination );
+//        }
+//    }
+//
+//    printf("pre dijkstra\n");
+//    // test dijkstra
+//    int *routes = dijkstra(&graph, 0, distance);
+//
+//    for (int i = 0; i < graph.vertex_count; i++) {
+//        printf("%d\n", routes[i]);
+//    }
+//}

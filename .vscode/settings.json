@@ -1,5 +1,11 @@
 {
     "files.associations": {
-        "graph.h": "c"
+        "graph.h": "c",
+        "*.tcc": "c",
+        "deque": "c",
+        "string": "c",
+        "unordered_map": "c",
+        "vector": "c",
+        "ostream": "c"
     }
 }

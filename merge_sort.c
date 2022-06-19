@@ -18,7 +18,7 @@ void swap(void* a, void* b, void* temp, int data_size) {
 }
 
 
-void insert(void *array, int start, int end, int (*compare)(void *, void *), int data_size) {
+void insert_on_array(void *array, int start, int end, int (*compare)(void *, void *), int data_size) {
     int i = start;
     void* temp = malloc(data_size);
     while (i < (end-1) && compare(array + i * data_size, array + (i + 1) * data_size) > 0) {
@@ -40,7 +40,7 @@ void merge(void *arr, int start, int mid, int end, int (*compare)(void *, void *
             //r<l
             swap(arr+l*data_size, arr+r*data_size, tmp, data_size);
 
-            insert(arr, r, end, compare, data_size);
+            insert_on_array(arr, r, end, compare, data_size);
         }
         l++;
     }

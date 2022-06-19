@@ -1,4 +1,4 @@
-#ifndef GRAPH_H
-#define GRAPH_H
+#ifndef MERGE_SORT_H
+#define MERGE_SORT_H
 #include "merge_sort.c"
 #endif
