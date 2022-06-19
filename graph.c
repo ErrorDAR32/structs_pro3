@@ -308,10 +308,10 @@ void main() {
     *data = 3;
     graph_add_edge(&graph, 2, 1, 3, data);
     data = malloc(sizeof(int));
-    *data = 1;
+    *data = 4;
     graph_add_edge(&graph, 3, 2, 4, data);
     data = malloc(sizeof(int));
-    *data = 2;
+    *data = 5;
     graph_add_edge(&graph, 4, 3, 0, data);
 
     //print graph vertexes
