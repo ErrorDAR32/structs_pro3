@@ -41,12 +41,12 @@ void insert(linkedList *l, vehicle * v){
         printf("\nNo vehicles aviable\n");
         return;
     }if(l->start==NULL){
-        printf("\nNo vehicles aviable\n");
+        l->start=v;
         return;
     }
     else{
         vehicle * actual = l->start;
-        while(actual!=NULL){
+        while(actual->sig!=NULL){
             actual=actual->sig;
         }actual->sig=v;
     }
@@ -55,10 +55,10 @@ void insert(linkedList *l, vehicle * v){
 vehicle *search(linkedList *l, char* var){
     if(l==NULL){
         printf("\nNo vehicles aviable\n");
-        return;
+        return NULL;
     }if(l->start==NULL){
         printf("\nNo vehicles aviable\n");
-        return;
+        return NULL;
     }
     else{
         vehicle * actual = l->start;
@@ -92,16 +92,16 @@ void printLList(linkedList* l){
 //returns the content of the file opened
 void* uploadData(){
     FILE *data;
- 	char text[MAX];
- 	data = fopen("data.txt","r"); //open file in reading mode (we know the name of the file, so it's not necessary bring it as func_args)
+ 	char* res = calloc(MAX, sizeof(char));
+    data = fopen("data.txt","r"); //open file in reading mode (we know the name of the file, so it's not necessary bring it as func_args)
  	if (data == NULL){
         exit(1);//error
     }else{
  	    while (feof(data) == 0){
- 	        fgets(text,MAX, data);
- 	        printf("%s\n", text);
+ 	        fgets(res,MAX, data);
+ 	        printf("%s\n",res);
  	    }
     }
     fclose(data);
-    return text;
+    return res;
 }
