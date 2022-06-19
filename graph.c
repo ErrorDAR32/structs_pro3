@@ -29,7 +29,7 @@ typedef struct Graph {
 typedef struct Vertex {
     int id;
     void *data;
-    struct Edge *edges; //only includes outbound edges
+    int *edges; //only includes outbound edges
     int edge_count;
 } Vertex;
 
@@ -37,8 +37,8 @@ typedef struct Vertex {
 typedef struct Edge {
     int id;
     void *data;
-    struct Vertex *source;
-    struct Vertex *destination;
+    int *source;
+    int *destination;
 } Edge;
 
 
@@ -118,6 +118,13 @@ int graph_get_vertex_position(Graph *graph, int id) {
 }
 
 Edge *graph_get_edge(Graph *graph, int id) {
+    Edge mock = (Edge){
+        id: id,
+        data: NULL,
+        source: NULL,
+        destination: NULL
+    };
+    return binary_search(graph->edges, 0, graph->edge_count, compare_edge_id, &mock, sizeof(Edge));
 
 }
 
@@ -134,9 +141,9 @@ int *dijkstra(Graph *graph, int start_id, int end_id, int (get_cost)(Edge*)) {
     while (current != -1) {
         Vertex *vertex = &graph->vertexes[current];
         for (int i = 0; i < vertex->edge_count; i++) {
-            Edge *edge = &vertex->edges[i];
+            int edge = &vertex->edges[i];
             int cost_to_destination = cost[current] + get_cost(edge);
-            int destination = graph_get_vertex_position(graph, edge->destination->id);
+            int destination = graph_get_vertex_position(graph, graph_get_edge(graph, edge)->destination->id);
             if (visited[destination]) {
                 if (cost_to_destination < cost[destination]) {
                     cost[destination] = cost_to_destination;
