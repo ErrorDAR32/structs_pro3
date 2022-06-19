@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
-#include "graph.c"
 #include "load_data.c"
 //#include "graph_loading.c"
 /**
@@ -18,7 +17,7 @@ void loadingData(linkedList * l){
         vehicle * v1 = new_vehicle("Carro",1,15);
         insert(l, v1);
         vehicle * v2 = new_vehicle("Bicicleta",10,0.7);
-        
+        insert(l, v2);
         printf("\nVehiculos cargados exitosamente\n");
     }
 
