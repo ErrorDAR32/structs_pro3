@@ -147,7 +147,9 @@ int *dijkstra(Graph *graph, int start_id, int (get_cost)(Edge*)) {
         prev[i] = -1;
     }
 
-    distances[graph_get_vertex_position(graph, start_id)] = 0;
+    int first_pos = graph_get_vertex_position(graph, start_id);
+
+    distances[first_pos] = 0;
     int queue_start = 0;
     int queue_end = 0;
     queue[queue_end++] = start_id;
@@ -157,13 +159,6 @@ int *dijkstra(Graph *graph, int start_id, int (get_cost)(Edge*)) {
         visited[current] = true;
 
         Vertex *current_vertex = graph_get_vertex(graph, current);
-        printf("edge count: %d\n", current_vertex->edge_count);
-
-        //print edges of current vertex
-        //for (int i = 0; i < current_vertex->edge_count; i++) {
-        //    Edge *edge = graph_get_edge(graph, current_vertex->edges[i]);
-        //    printf("%d %d %d\n", edge->source, edge->destination, get_cost(edge));
-        //}
 
         for (int i = 0; i < current_vertex->edge_count; i++) {
             Edge *edge = graph_get_edge(graph, current_vertex->edges[i]);
@@ -256,6 +251,7 @@ Edge *graph_add_edge(Graph *graph, int id, int source, int destination, void *da
     }
 
     Edge e = new_edge(id, source, destination, data);
+
     graph->edges[graph->edge_count] = e;
     graph->edge_count++;
 
@@ -327,18 +323,13 @@ void main() {
             printf("    %d\n", graph.vertexes[i].edges[j]);
             
             Edge *edge = graph_get_edge(&graph, graph.vertexes[i].edges[j]);
-            printf("e: %p\n", edge);
-            printf("    e: %d %d %p\n", edge->source, edge->destination, edge->data);
+            printf("    e: %d %d\n", edge->source, edge->destination );
         }
     }
 
     printf("pre dijkstra\n");
     // test dijkstra
     int *routes = dijkstra(&graph, 0, distance);
-
-    for (int i = 0; i < graph.vertex_count; i++) {
-        printf("%c\n", *(char*)graph.vertexes[i].data);
-    }
 
     for (int i = 0; i < graph.vertex_count; i++) {
         printf("%d\n", routes[i]);
