@@ -115,6 +115,6 @@ void test() {
     printf("\n");
 }
 
-void main() {
-    test();
-}
+//void main() {
+//    test();
+//}
